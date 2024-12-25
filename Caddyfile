@@ -1,0 +1,14 @@
+# Redirect HTTP (port 80) to HTTPS (port 443)
+{$WEB_DOMAIN}:80 {
+    redir https://{host}{uri} permanent
+}
+
+# Home page server
+{$WEB_DOMAIN} {
+    reverse_proxy flask_gunicorn_web:5000
+}
+
+# Portainer on HTTPS (secured connection)
+portainer.{$WEB_DOMAIN} {
+    reverse_proxy portainer:9000
+}
