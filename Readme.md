@@ -14,22 +14,22 @@ https://raw.githubusercontent.com/dhimanparas20/Useful-Scripts/refs/heads/main/S
 Note: ``Make sure Docker and Docker Compose are installed on your Pi/Server.``
 
 ### 2. Get a Domain
-- Register a domain using No-IP. This service will help you map a dynamic IP to a domain.
+- Register a domain using [No-IP](https://my.noip.com/). This service will help you map a dynamic IP to a domain.
 
 ### 3. Set up Dynamic DNS (DDNS)
-- Configure DDNS in your router settings to automatically update your dynamic IP every hour, or use the script/software provided by No-IP to do this.
+- Configure DDNS in your [router settings](http://192.168.1.1) to automatically update your dynamic IP every hour, or use the script/software provided by No-IP to do this.
 
 ### 4. Set Port Forwarding
 - In your router settings, enable port forwarding or DMZ (Demilitarized Zone) to forward traffic to your Pi/Server's static IP. Ensure that the IP address of your Pi/Server is set to static.
 
 ### 5. Clone the Repo
-- Clone this repository to your Pi/Server:
+- Clone [this repository](https://github.com/dhimanparas20/Demo_Home_Page) to your Pi/Server:
 
 ```bash
 git clone https://github.com/dhimanparas20/Demo_Home_Page
 ```
 ### 6. Configure docker-compose.yml
-- Make sure to configure the docker-compose.yml file as needed for your setup.
+- Make sure to configure the [docker-compose](compose.yml) file as needed for your setup.
 
 ### 7. Run the Application
 - Once everything is set up, run the following command to start the application:
