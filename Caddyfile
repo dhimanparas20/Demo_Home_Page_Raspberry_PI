@@ -6,6 +6,6 @@
     reverse_proxy flask_gunicorn_web:5000
 }
 
-portainer.{$WEB_DOMAIN} {
+{$WEB_DOMAIN}:500 {
     reverse_proxy portainer:9443
 }
