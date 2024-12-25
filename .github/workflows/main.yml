@@ -1,19 +1,22 @@
 on:
-    workflow_dispatch:
+    # push:
+    #   branches:
+    #     - main
+    workflow_dispatch: 
   
-  jobs:
-    run_pull:
-      name: run pull
-      runs-on: ubuntu-latest
-  
-      steps:
-      - name: Install sshpass
-        run: sudo apt-get install -y sshpass
-  
-      - name: connect and pull
-        run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
-  
-      - name: Build and run Docker Compose
-        run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && sudo docker compose build && sudo docker compose up -d && docker image prune -f" 
+jobs:
+  run_pull:
+    name: run pull
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Install sshpass
+      run: sudo apt-get install -y sshpass
+
+    - name: connect and pull
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.MAIN_BRANCH }} && git pull && exit"
+
+    - name: Build and run Docker Compose
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && sudo docker compose build && sudo docker compose up -d && docker image prune -f" 
