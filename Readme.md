@@ -1,6 +1,6 @@
 # Simple Deploy on Your Pi
 
-This guide will help you set up a server on your Raspberry Pi or Ubuntu server with Docker and Docker Compose.
+This guide will help you set up a server on your Raspberry Pi or Ubuntu server with Docker and Docker Compose along with a free domain and port forwardind
 
 ## Steps:
 
