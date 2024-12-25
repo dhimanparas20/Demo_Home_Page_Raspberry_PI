@@ -1,4 +1,20 @@
+# Networks for communication between services
+networks:
+  caddy:
+    driver: bridge
+
+# Volumes for data, config, and logs
+volumes:
+  config:
+  data:
+  log:
+  caddy_data:
+  caddy_config:
+  portainer_data:
+    driver: local
+
 services:
+  # Flask server
   flask_gunicorn_web:
     container_name: flask_gunicorn_web
     depends_on:
@@ -6,6 +22,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    # ports:
+    #   - "80:5000"
     restart: unless-stopped
     environment: 
       - GUNICORN_CMD_ARGS="--workers 4 --bind 0.0.0.0:5000"
@@ -13,6 +31,7 @@ services:
     networks:
       - caddy
 
+  # Portainer container for Docker management UI
   portainer:
     image: portainer/portainer-ce:2.21.4
     container_name: portainer
@@ -20,14 +39,15 @@ services:
       - caddy
     restart: always
     ports:
-      - "8000:8000"
-      - "9443:9443"
+      - "8000:8000" # Port for Edge Agent communication
+      - "9443:9443" # Port for secure web UI
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
+      - /var/run/docker.sock:/var/run/docker.sock # Access to Docker engine
+      - portainer_data:/data # Persistent data storage
     networks:
       - caddy 
 
+  # Caddy server for reverse proxying and HTTPS
   caddy:
     image: caddy:latest
     container_name: caddy
@@ -35,16 +55,11 @@ services:
     environment:
       - WEB_DOMAIN=mstservices.ddns.net
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:80"       # HTTP (will be redirected to HTTPS)
+      - "443:443"     # HTTPS
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ./caddy_data:/data
       - ./caddy_config:/config
     networks:
-      - caddy
-
-# Add networks section outside services
-networks:
-  caddy:
-    driver: bridge
+      - caddy   
