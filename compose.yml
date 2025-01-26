@@ -25,7 +25,7 @@ services:
     restart: unless-stopped
     environment: 
       - GUNICORN_CMD_ARGS="--workers 4 --bind 0.0.0.0:5000"
-    user: mst
+    # user: mst
     networks:
       - caddy
 
