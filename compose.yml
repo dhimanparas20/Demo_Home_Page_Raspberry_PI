@@ -53,7 +53,7 @@ services:
     container_name: caddy
     restart: unless-stopped
     environment:
-      - WEB_DOMAIN=mstservices.ddns.net
+      - WEB_DOMAIN=mst-services.ddns.net
     ports:
       - "80:80"       # HTTP (will be redirected to HTTPS)
       - "443:443"     # HTTPS
