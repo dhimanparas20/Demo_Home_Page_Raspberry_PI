@@ -10,8 +10,6 @@ volumes:
   log:
   caddy_data:
   caddy_config:
-  portainer_data:
-    driver: local
 
 services:
   # Flask server
