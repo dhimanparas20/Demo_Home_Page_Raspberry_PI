@@ -25,25 +25,25 @@ services:
     restart: unless-stopped
     environment: 
       - GUNICORN_CMD_ARGS="--workers 4 --bind 0.0.0.0:5000"
-    # user: mst
+    user: mst
     networks:
       - caddy
 
-  # # Portainer container for Docker management UI
-  # portainer:
-  #   image: portainer/portainer-ce:2.21.4
-  #   container_name: portainer
-  #   depends_on:
-  #     - caddy
-  #   restart: always
-  #   ports:
-  #     - "8000:8000" # Port for Edge Agent communication
-  #     - "9443:9443" # Port for secure web UI
-  #   volumes:
-  #     - /var/run/docker.sock:/var/run/docker.sock # Access to Docker engine
-  #     - portainer_data:/data # Persistent data storage
-  #   networks:
-  #     - caddy 
+  # Portainer container for Docker management UI
+  portainer:
+    image: portainer/portainer-ce:2.21.4
+    container_name: portainer
+    depends_on:
+      - caddy
+    restart: always
+    ports:
+      - "8000:8000" # Port for Edge Agent communication
+      - "9443:9443" # Port for secure web UI
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Access to Docker engine
+      - portainer_data:/data # Persistent data storage
+    networks:
+      - caddy 
 
   # Caddy server for reverse proxying and HTTPS
   caddy:
