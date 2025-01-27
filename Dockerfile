@@ -14,14 +14,14 @@ COPY requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# # Add a dedicated user and group 'mst'
-# RUN addgroup -S mst && adduser -S mst -G mst
+# Add a dedicated user and group 'mst'
+RUN addgroup -S mst && adduser -S mst -G mst
 
-# # Set ownership of the /app directory to the 'mst' user
-# RUN chown -R mst:mst /app
+# Set ownership of the /app directory to the 'mst' user
+RUN chown -R mst:mst /app
 
-# # Switch to the 'mst' user
-# USER mst
+# Switch to the 'mst' user
+USER mst
 
 # Copy the entire application code into the container
 COPY . .
