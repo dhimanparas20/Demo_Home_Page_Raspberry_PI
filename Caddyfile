@@ -1,11 +1,16 @@
 {$WEB_DOMAIN}:80 {
-    redir https://{host}{uri} permanent
+	redir https://{host}{uri} permanent
 }
 
 {$WEB_DOMAIN} {
-    reverse_proxy flask_gunicorn_web:5000
+	reverse_proxy flask_gunicorn_web:5000
 }
 
-{$WEB_DOMAIN}:5500 {
-    reverse_proxy portainer:9443
+logs.privatedns.org:443 {
+	reverse_proxy portainer:9000
+}
+
+# Also add HTTP redirect for logs subdomain
+logs.privatedns.org:80 {
+	redir https://{host}{uri} permanent
 }
