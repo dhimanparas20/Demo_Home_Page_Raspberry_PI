@@ -54,6 +54,10 @@ In your GitHub repository, go to ``Settings > Security > Secrets and Variables >
 ### 2. CI/CD Workflow:
 After adding the secrets, the pipeline will be triggered on each push or manual trigger to deploy the updates to your Pi/Server automatically.
 
+## Auto IP updation to Non Static IP providing ISP Users
+- Just visit [This repo](https://github.com/dhimanparas20/dynamic_dns_updater). It will guide you how to setup stuff
+- #prostuff use [This service](https://github.com/dhimanparas20/Room_Automation_CI-CD_Deploy/blob/main/compose.yml#L41) to use lazydocker web instead of portainer
+
 The pipeline will:
 - Pull the latest changes from your GitHub repository.
 - Build the Docker image.
