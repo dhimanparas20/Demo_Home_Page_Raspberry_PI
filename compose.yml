@@ -38,10 +38,10 @@ services:
     depends_on:
       - caddy
     restart: always
-    ports:
-      - "8000:8000" # Port for Edge Agent communication
-      - "9443:9443" # Port for secure web UI
-      - "9000:9000" # http port
+    # ports:
+    #   - "8000:8000" # Port for Edge Agent communication
+    #   - "9443:9443" # Port for secure web UI
+    #   - "9000:9000" # http port
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # Access to Docker engine
       - portainer_data:/data # Persistent data storage
