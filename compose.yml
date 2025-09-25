@@ -41,6 +41,7 @@ services:
     ports:
       - "8000:8000" # Port for Edge Agent communication
       - "9443:9443" # Port for secure web UI
+      - "9000:9000" # http port
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # Access to Docker engine
       - portainer_data:/data # Persistent data storage
@@ -53,7 +54,7 @@ services:
     container_name: caddy
     restart: unless-stopped
     environment:
-      - WEB_DOMAIN=mst-services.ddns.net
+      - WEB_DOMAIN=ken.privatedns.org
     ports:
       - "80:80"       # HTTP (will be redirected to HTTPS)
       - "443:443"     # HTTPS
@@ -62,4 +63,4 @@ services:
       - ./caddy_data:/data
       - ./caddy_config:/config
     networks:
-      - caddy   
+      - caddy  
