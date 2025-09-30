@@ -1,10 +1,12 @@
 import datetime
 
 from flask import Flask, render_template, make_response, jsonify, request
+from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_restful import Api, Resource
 
 # Initialize Flask app
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1)
 api = Api(app)
 
 
