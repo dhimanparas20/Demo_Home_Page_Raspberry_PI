@@ -5,3 +5,4 @@ env
 .idea
 caddy_data
 caddy_config
+.venv

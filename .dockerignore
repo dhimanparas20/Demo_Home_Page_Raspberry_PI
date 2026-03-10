@@ -43,6 +43,7 @@ compose.yml
 
 # Virtual environments
 venv
+.venv
 env
 env_sample
 
