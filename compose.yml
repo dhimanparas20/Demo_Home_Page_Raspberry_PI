@@ -49,18 +49,30 @@ services:
       - caddy 
 
   # Caddy server for reverse proxying and HTTPS
-  caddy:
-    image: caddy:latest
-    container_name: caddy
+  # caddy:
+  #   image: caddy:latest
+  #   container_name: caddy
+  #   restart: unless-stopped
+  #   environment:
+  #     - WEB_DOMAIN=ken.privatedns.org
+  #   ports:
+  #     - "80:80"       # HTTP (will be redirected to HTTPS)
+  #     - "443:443"     # HTTPS
+  #   volumes:
+  #     - ./Caddyfile:/etc/caddy/Caddyfile
+  #     - ./caddy_data:/data
+  #     - ./caddy_config:/config
+  #   networks:
+  #     - caddy  
+  itcyou:
+    image: dhimanparas20/itcyou:latest
+    container_name: itcyou
     restart: unless-stopped
+    network_mode: host
     environment:
-      - WEB_DOMAIN=ken.privatedns.org
-    ports:
-      - "80:80"       # HTTP (will be redirected to HTTPS)
-      - "443:443"     # HTTPS
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
-      - ./caddy_data:/data
-      - ./caddy_config:/config
-    networks:
-      - caddy  
+      ITCYOU_PORT: ${ITCYOU_PORT}
+      ITCYOU_SUBDOMAIN: ${ITCYOU_SUBDOMAIN}
+      ITCYOU_TOKEN: ${ITCYOU_API}
+    depends_on:
+      app:
+        condition: service_healthy
