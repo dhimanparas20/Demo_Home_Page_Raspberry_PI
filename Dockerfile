@@ -1,33 +1,32 @@
-# Use the smallest official Python runtime
-FROM python:3.11.11-alpine
+# Use Python on Alpine 3.14
+FROM python:3.14-alpine
 
-# Set environment variables for Python to optimize runtime
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+# Set environment variables for Python to optimize runtime and set timezone
+ARG TZ=Asia/Kolkata
+ENV TZ=${TZ} \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    COMPOSE_BAKE=true
 
-# Set the working directory in the container
+# Install system dependencies (Alpine)
+RUN apk add --no-cache \
+        tzdata \
+        curl
+
+
+# Copy the uv and uvx binaries from the official uv image
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
+
+# Set working directory
 WORKDIR /app
 
-# Copy only requirements.txt first (for caching)
-COPY requirements.txt .
-
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Add a dedicated user and group 'mst'
-RUN addgroup -S mst && adduser -S mst -G mst
-
-# Set ownership of the /app directory to the 'mst' user
-RUN chown -R mst:mst /app
-
-# Switch to the 'mst' user
-USER mst
+# Copy only dependency files first for better Docker cache utilization
+COPY ./pyproject.toml uv.lock ./
+RUN UV_HTTP_TIMEOUT=90 uv sync --frozen --no-dev
 
 # Copy the entire application code into the container
 COPY . .
 
-# Expose port 5000 for the Flask application
 EXPOSE 5000
 
-# Run the Flask application with Gunicorn
-CMD ["gunicorn", "-w", "1", "-b", "0.0.0.0:5000", "app:app"]
+CMD ["uv","run","gunicorn", "--workers", "1", "--bind", "0.0.0.0:5000", "app:app"]

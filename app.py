@@ -1,8 +1,8 @@
 import datetime
 
 from flask import Flask, render_template, make_response, jsonify, request
-from werkzeug.middleware.proxy_fix import ProxyFix
 from flask_restful import Api, Resource
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 # Initialize Flask app
 app = Flask(__name__)
