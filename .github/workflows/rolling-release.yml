@@ -1,0 +1,59 @@
+name: Rolling Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag to deploy (defaults to release tag)"
+        required: false
+  release:
+    types:
+      - published
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo (optional, for context)
+        uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Rolling deploy via SSH with password
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -e
+            DEPLOY_REF=""
+            if [ -n "${{ github.event.inputs.image_tag }}" ]; then
+              DEPLOY_REF="${{ github.event.inputs.image_tag }}"
+            elif [ "${{ github.event_name }}" = "release" ]; then
+              DEPLOY_REF="${{ github.ref_name }}"
+            fi
+            echo "\n\n-----------------------------------------------------------------------"
+            echo "Entering Project Folder"
+            cd ${{ secrets.WORK_DIR }}
+            git fetch --tags
+            if [ -n "$DEPLOY_REF" ]; then
+              git checkout "$DEPLOY_REF"
+              export IMAGE_TAG="$DEPLOY_REF"
+            else
+              echo "\n\n-----------------------------------------------------------------------"
+              echo "Pulling Latest Build"
+              git checkout ${{ secrets.MAIN_BRANCH }}
+              git pull origin ${{ secrets.MAIN_BRANCH }}
+            fi
+
+            echo "\n\n-----------------------------------------------------------------------"
+            echo "Rolling out services..."
+            sudo docker rollout app --pre-stop-hook "touch /tmp/drain && sleep 5"
+            done
+            echo "\n\n------------------------------------------------------------------------"
+            echo "                       SCRIPT SUCCEEDED SUCCESSFULLY :-)                    "
+            echo "----------------------------------------------------------------------------"
+          EOF

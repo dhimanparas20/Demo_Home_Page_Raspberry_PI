@@ -1,0 +1,50 @@
+name: Clean Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo (optional, for context)
+        uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Deploy via SSH with password
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -e
+            echo "\n\n-----------------------------------------------------------------------"
+            echo "Entering Project Folder"
+            cd ${{ secrets.WORK_DIR }}
+            git pull origin ${{ secrets.MAIN_BRANCH }}
+          
+          
+            echo "\n\n-----------------------------------------------------------------------"
+            echo "Building Docker Images.."
+            sudo docker compose build app 
+          
+            echo "\n\n-----------------------------------------------------------------------"
+            echo "Rolling out services..."
+            for service in app; do
+              echo "\nRolling out $service"
+              sudo docker rollout "$service" --pre-stop-hook "touch /tmp/drain && sleep 5"
+            done
+          
+            echo "\n\n-----------------------------------------------------------------------"
+            echo "Pruning Docker Images.."
+            sudo docker image prune -f
+          
+          
+            echo "\n\n------------------------------------------------------------------------"
+            echo "                       SCRIPT SUCCEEDED SUCCESSFULLY :-)                    "
+            echo "----------------------------------------------------------------------------"
+          EOF

@@ -1,0 +1,37 @@
+name: Shallow Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo (optional, for context)
+        uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y sshpass
+
+      - name: Deploy via SSH with password
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -e ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+            set -e
+            echo "\n\n-----------------------------------------------------------------------"
+            echo "Entering Project Folder"
+            cd ${{ secrets.WORK_DIR }}
+            git pull origin ${{ secrets.MAIN_BRANCH }}
+          
+          
+            echo "\n\n-----------------------------------------------------------------------"
+            echo "Restarting Docker Compose stack..."
+            sudo docker compose app 
+            echo "\n\n------------------------------------------------------------------------"
+            echo "                       SCRIPT SUCCEEDED SUCCESSFULLY :-)                    "
+            echo "----------------------------------------------------------------------------"
+          EOF
