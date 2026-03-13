@@ -6,3 +6,4 @@ env
 caddy_data
 caddy_config
 .venv
+lazydocker-web

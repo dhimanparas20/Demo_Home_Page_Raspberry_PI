@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/ping')" ]
-      interval: 30s
+      interval: 5m
       timeout: 5s
       retries: 3
       start_period: 5s
@@ -58,7 +58,7 @@ services:
     networks:
       - caddy
     ports:
-      - ":7681"
+      - "7681:7681"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - ./lazydocker-web/config.yml:/root/.config/lazydocker/config.yml
@@ -90,7 +90,7 @@ services:
 
 
   ddns:
-    image: dhimanparas20/ddns:raspberrypi
+    image: dhimanparas20/ddns:latest
     container_name: ddns
     restart: unless-stopped
     env_file:
