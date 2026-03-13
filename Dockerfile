@@ -29,4 +29,5 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["uv","run","gunicorn", "--workers", "1", "--bind", "0.0.0.0:5000", "app:app"]
+# Keep Gunicorn args configurable via GUNICORN_CMD_ARGS (compose/environment).
+CMD ["uv","run","gunicorn","app:app"]

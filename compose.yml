@@ -19,8 +19,10 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
-#    environment:
-#      - GUNICORN_CMD_ARGS="--workers 1 --bind 0.0.0.0:5000"
+    environment:
+      # Default Gunicorn timeout is 30s; with a single sync worker, any slow client/connection can
+      # trigger WORKER TIMEOUT and make the container look like it's "crashing".
+      GUNICORN_CMD_ARGS: "--workers 2 --worker-class gthread --threads 4 --bind 0.0.0.0:5000 --timeout 60 --graceful-timeout 30 --keep-alive 2 --access-logfile - --error-logfile -"
     restart: unless-stopped
     healthcheck:
       test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/ping')" ]
