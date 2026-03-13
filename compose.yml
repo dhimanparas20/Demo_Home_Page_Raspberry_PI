@@ -63,10 +63,7 @@ services:
       - "7681:7681"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      # Mount the whole config dir to avoid file-mount issues if the image doesn't
-      # already have /root/.config/lazydocker created.
-#      - ./lazydocker-web:/root/.config/lazydocker
-      # - /run/user/1000/docker.sock:/var/run/docker.sock
+#      - /run/user/1000/docker.sock:/var/run/docker.sock
 
 
   # Caddy server for reverse proxying and HTTPS
@@ -74,8 +71,11 @@ services:
     image: caddy:latest
     container_name: caddy
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      - WEB_DOMAIN=mst.evils.in
+      - APP_DOMAIN=${APP_DOMAIN}
+      - LOGS_DOMAIN=${LOGS_DOMAIN}
     ports:
       - "80:80"       # HTTP (will be redirected to HTTPS)
       - "443:443"     # HTTPS

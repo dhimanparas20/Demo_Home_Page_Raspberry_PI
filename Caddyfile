@@ -1,16 +1,21 @@
-{$WEB_DOMAIN}:80 {
+{APP_DOMAIN}:80 {
 	redir https://{host}{uri} permanent
 }
 
-{$WEB_DOMAIN} {
+{$LOGS_DOMAIN}:80 {
+	redir https://{host}{uri} permanent
+}
+
+
+
+
+{APP_DOMAIN} {
 	reverse_proxy app:5000
 }
 
-#mst.evils.in/:443 {
-#	reverse_proxy lazydocker:7681
-#}
-#
-## Also add HTTP redirect for logs subdomain
-#mst.evils.in/:80 {
-#	redir https://{host}{uri} permanent
-#}
+{$LOGS_DOMAIN} {
+	basic_auth {
+        mst $2a$14$VzMr0deD1LOiY0ExYP6xhOAoSISmrsH.f1yX8eRWyTYebGTrr7WRC
+    }
+	reverse_proxy lazydocker:7681
+}
