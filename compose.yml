@@ -32,23 +32,23 @@ services:
       - caddy
 
 
-  portainer:
-    image: portainer/portainer-ce:alpine
-    restart: unless-stopped
-    networks:
-      - caddy
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    healthcheck:
-      test: [ "CMD", "wget", "--no-verbose", "--no-check-certificate", "--tries=1", "--spider", "https://localhost:9443" ]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 5s
-    ports:
-      - 9443:9443
-      - 8000:8000
+#  portainer:
+#    image: portainer/portainer-ce:alpine
+#    restart: unless-stopped
+#    networks:
+#      - caddy
+#    volumes:
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - portainer_data:/data
+#    healthcheck:
+#      test: [ "CMD", "wget", "--no-verbose", "--no-check-certificate", "--tries=1", "--spider", "https://localhost:9443" ]
+#      interval: 30s
+#      timeout: 5s
+#      retries: 3
+#      start_period: 5s
+#    ports:
+#      - 9443:9443
+#      - 8000:8000
 
 
   lazydocker:
@@ -92,11 +92,21 @@ services:
   ddns:
     image: dhimanparas20/ddns:latest
     container_name: ddns
-    restart: always
+    restart: unless-stopped
+    env_file:
+      - .env
     environment:
-      - TZ=Asia/Kolkata
-      - FREEDNS_TOKEN=your_token_here
-      - UPDATE_INTERVAL=1
+      TZ: Asia/Calcutta
+#      FREEDNS_UPDATE_URL: ${FREEDNS_UPDATE_URL}
+      # Optional alternative to FREEDNS_UPDATE_URL:
+      FREEDNS_TOKEN: ${FREEDNS_TOKEN}
+      UPDATE_INTERVAL: 1
+      FREEDNS_REQUEST_TIMEOUT_SECONDS: 15
+      FREEDNS_CONNECT_TIMEOUT_SECONDS: 8
+      FREEDNS_RETRY_COUNT: 1
+      FREEDNS_FORCE_IPV4: 1
+      FREEDNS_ALLOW_HTTP_FALLBACK: 1
+      FORCE_UPDATE_EACH_CYCLE: 0
     volumes:
       - dns-logs:/var/log/freedns
       - dns-config:/etc/freedns
