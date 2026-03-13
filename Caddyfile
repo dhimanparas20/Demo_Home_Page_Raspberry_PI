@@ -1,4 +1,4 @@
-{APP_DOMAIN}:80 {
+{$APP_DOMAIN}:80 {
 	redir https://{host}{uri} permanent
 }
 
@@ -6,10 +6,7 @@
 	redir https://{host}{uri} permanent
 }
 
-
-
-
-{APP_DOMAIN} {
+{$APP_DOMAIN} {
 	reverse_proxy app:5000
 }
 
