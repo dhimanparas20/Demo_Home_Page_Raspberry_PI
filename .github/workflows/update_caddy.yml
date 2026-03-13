@@ -30,7 +30,7 @@ jobs:
           
             echo "\n\n-----------------------------------------------------------------------"
             echo "Restarting Caddy"
-            docker compose restart caddy
+            sudo docker compose restart caddy
             echo "\n\n------------------------------------------------------------------------"
             echo "                       SCRIPT SUCCEEDED SUCCESSFULLY :-)                    "
             echo "----------------------------------------------------------------------------"
