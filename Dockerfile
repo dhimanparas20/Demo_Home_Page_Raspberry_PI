@@ -27,7 +27,7 @@ RUN UV_HTTP_TIMEOUT=90 uv sync --frozen --no-dev
 # Copy the entire application code into the container
 COPY . .
 
-EXPOSE 5000
+#EXPOSE 5000
 
 # Keep Gunicorn args configurable via GUNICORN_CMD_ARGS (compose/environment).
 CMD ["uv","run","gunicorn","app:app"]

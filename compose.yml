@@ -9,7 +9,7 @@ volumes:
   caddy_config:
   dns-logs:
   dns-config:
-  portainer_data:
+#  portainer_data:
 
 services:
 
@@ -17,8 +17,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
+#    ports:
+#      - "5000:5000"
     environment:
       # Default Gunicorn timeout is 30s; with a single sync worker, any slow client/connection can
       # trigger WORKER TIMEOUT and make the container look like it's "crashing".
@@ -59,8 +59,8 @@ services:
     restart: unless-stopped
     networks:
       - caddy
-    ports:
-      - "7681:7681"
+#    ports:
+#      - "7681:7681"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 #      - /run/user/1000/docker.sock:/var/run/docker.sock
