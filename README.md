@@ -176,7 +176,15 @@ Notes:
 - `main.yml`: manual deploy, runs `git checkout $MAIN_BRANCH`, `git pull`, then `docker compose build` and `docker compose up -d`, then prunes images.
 - `update_caddy.yml`: manual deploy, pulls latest and restarts only the `caddy` service.
 - `clean-deploy.yml` and `rolling-release.yml`: these reference a `docker rollout` command and a `/tmp/drain` mechanism.
-  - This repo does not include a `docker rollout` implementation. If you want to use these workflows, you must install/provide that command on the server (or rewrite the workflows to use plain `docker compose up -d` patterns).
+  - These workflows require the `docker-rollout` Docker CLI plugin to be installed on the target server: `https://github.com/wowu/docker-rollout`.
+  - Install (per-user):
+    ```bash
+    mkdir -p ~/.docker/cli-plugins
+    curl https://raw.githubusercontent.com/wowu/docker-rollout/main/docker-rollout -o ~/.docker/cli-plugins/docker-rollout
+    chmod +x ~/.docker/cli-plugins/docker-rollout
+    ```
+  - If you use Docker with `sudo` (or want it available for all users), install it to `/usr/local/lib/docker/cli-plugins/` instead.
+  - If you do not want to install `docker-rollout`, rewrite those workflows to use plain `docker compose up -d` / `docker compose restart` patterns.
 
 ### Local Testing Without Domains
 
