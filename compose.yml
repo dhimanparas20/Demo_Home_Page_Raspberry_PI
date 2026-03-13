@@ -90,7 +90,7 @@ services:
 
 
   ddns:
-    image: dhimanparas20/ddns:latest
+    image: dhimanparas20/ddns:raspberrypi
     container_name: ddns
     restart: unless-stopped
     env_file:
