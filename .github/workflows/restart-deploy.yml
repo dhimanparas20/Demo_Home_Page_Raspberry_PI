@@ -29,8 +29,8 @@ jobs:
           
           
             echo "\n\n-----------------------------------------------------------------------"
-            echo "Restarting Docker Compose stack..."
-            sudo docker compose app 
+            echo "Restarting app service..."
+            sudo docker compose restart app
             echo "\n\n------------------------------------------------------------------------"
             echo "                       SCRIPT SUCCEEDED SUCCESSFULLY :-)                    "
             echo "----------------------------------------------------------------------------"

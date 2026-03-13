@@ -19,4 +19,4 @@ template: |
   ## Changes
 
   $CHANGES
-commitish: master
+commitish: main

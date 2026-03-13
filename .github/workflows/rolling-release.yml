@@ -52,7 +52,6 @@ jobs:
             echo "\n\n-----------------------------------------------------------------------"
             echo "Rolling out services..."
             sudo docker rollout app --pre-stop-hook "touch /tmp/drain && sleep 5"
-            done
             echo "\n\n------------------------------------------------------------------------"
             echo "                       SCRIPT SUCCEEDED SUCCESSFULLY :-)                    "
             echo "----------------------------------------------------------------------------"
