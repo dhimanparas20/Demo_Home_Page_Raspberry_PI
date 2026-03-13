@@ -63,7 +63,9 @@ services:
       - "7681:7681"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./lazydocker-web/config.yml:/root/.config/lazydocker/config.yml
+      # Mount the whole config dir to avoid file-mount issues if the image doesn't
+      # already have /root/.config/lazydocker created.
+#      - ./lazydocker-web:/root/.config/lazydocker
       # - /run/user/1000/docker.sock:/var/run/docker.sock
 
 
