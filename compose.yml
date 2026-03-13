@@ -24,14 +24,14 @@ services:
       # trigger WORKER TIMEOUT and make the container look like it's "crashing".
       GUNICORN_CMD_ARGS: "--workers 2 --worker-class gthread --threads 4 --bind 0.0.0.0:5000 --timeout 60 --graceful-timeout 30 --keep-alive 2 --access-logfile - --error-logfile -"
     restart: unless-stopped
+    networks:
+      - caddy
     healthcheck:
-      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/ping')" ]
+      test: [ "CMD-SHELL", "test ! -f /tmp/drain && curl -f http://localhost:5000/ping" ]
       interval: 5m
       timeout: 5s
       retries: 3
-      start_period: 5s
-    networks:
-      - caddy
+      start_period: 30s
 
 
 #  portainer:
