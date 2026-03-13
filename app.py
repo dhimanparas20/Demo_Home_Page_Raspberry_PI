@@ -34,6 +34,12 @@ def ping():
     return resp
 
 
+@app.route("/healthz")
+def healthz():
+    # Used by container healthchecks. Keep it extremely cheap and avoid log spam.
+    return "ok", 200
+
+
 # Add the resource to the API
 api.add_resource(Index, "/")
 
